@@ -14,19 +14,29 @@ app.use(helmet());
 app.use(express.json({ verify }));
 
 // this endpoint receives webhooks from the GitHub
-app.post('/webhook', async (req, res) => {
+app.post('/webhook', async (req, res, next) => {
   const { 'x-github-event': eventName, 'user-agent': userAgent } = req.headers;
 
   // ensure that this is a GitHub webhook request
   if (userAgent.indexOf('GitHub-Hookshot/') !== 0) {
-    throw errors.BadRequest(`"${userAgent}" is invalid user-agent.`);
+    return next(errors.BadRequest(`"${userAgent}" is invalid user-agent.`));
+  }
+
+  // always return 200 on ping requests
+  if (eventName === 'ping') {
+    res.sendStatus(200);
+    return;
   }
 
   const payload = req.body;
 
   // Make sure to track only PR-related events
   if (eventName !== 'pull_request') {
-    throw errors.BadRequest(`Event "${eventName}" is not supported.`);
+    return next(
+      errors.BadRequest(
+        `Event "${eventName}" is not supported. You need to configure your webhook properly.`,
+      ),
+    );
   }
 
   // Make sure to handle only PRs that are ready for review
@@ -39,7 +49,7 @@ app.post('/webhook', async (req, res) => {
     await updateReviewNotification(payload.pull_request, req.log);
   }
 
-  res.status(200).send();
+  res.sendStatus(200);
 });
 
 // error logging
