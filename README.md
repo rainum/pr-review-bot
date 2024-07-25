@@ -1,10 +1,10 @@
 # pr-review-bot
 
-This bot sends notifications to Slack channel about requested PR reviews and tags reviwers in the message.
+This bot sends notifications to the Slack channel about requested PR reviews and tags reviewers in the message.
 
 ## Configuration
 
-Secrets directory should look like this:
+The secrets directory should look like this:
 
 ```
 secrets
