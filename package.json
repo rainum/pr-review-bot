@@ -1,0 +1,28 @@
+{
+  "name": "pr-review-bot",
+  "version": "1.0.0",
+  "main": "src/index.mjs",
+  "repository": "git@github.com:rainum/pr-review-bot.git",
+  "author": "Vazha Omanashvili <rainum.ua@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "engines": {
+    "node": "20.10.0"
+  },
+  "scripts": {
+    "start": "NODE_ENV=production node src/index.mjs",
+    "dev": "NODE_ENV=development node --watch src/index.mjs | pino-pretty"
+  },
+  "dependencies": {
+    "@slack/web-api": "^7.3.1",
+    "envalid": "^8.0.0",
+    "express": "^4.19.2",
+    "helmet": "^7.1.0",
+    "http-errors": "^2.0.0",
+    "pino-http": "^10.2.0"
+  },
+  "devDependencies": {
+    "pino-pretty": "^11.2.1",
+    "prettier": "^3.3.3"
+  }
+}
