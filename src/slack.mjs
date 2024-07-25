@@ -4,18 +4,19 @@ import env from './env.mjs';
 
 const client = new WebClient(env.SLACK_TOKEN);
 
-// map Slack users to GitHub logins
-const GH_TO_SLACK_USERS_MAP = new Map(
-  Object.entries({
-    rainum: 'vazha',
-    'stoplight-qa': 'vazha',
-  }),
-);
+// map Slack users to GitHub usernames
+const GH_TO_SLACK_USERS_MAP = {
+  'stoplight-qa': 'vazha',
+  johndoe156: 'John Doe',
+};
+
+// remove any possible duplicates from users map
+const usersMap = new Map(Object.entries(GH_TO_SLACK_USERS_MAP));
 
 export const postReviewNotification = async (pr, log) => {
   // create an array of Slack mentions, include only existing users
   const mentions = pr.requested_reviewers.reduce((acc, { login }) => {
-    const slackUser = GH_TO_SLACK_USERS_MAP.get(login);
+    const slackUser = usersMap.get(login);
 
     if (slackUser) {
       acc.push(`<@${slackUser}>`);

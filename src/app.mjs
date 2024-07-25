@@ -18,7 +18,7 @@ app.post('/webhook', async (req, res, next) => {
   const { 'x-github-event': eventName, 'user-agent': userAgent } = req.headers;
 
   // ensure that this is a GitHub webhook request
-  if (userAgent.indexOf('GitHub-Hookshot/') !== 0) {
+  if (!userAgent.startsWith('GitHub-Hookshot')) {
     return next(errors.BadRequest(`"${userAgent}" is invalid user-agent.`));
   }
 
